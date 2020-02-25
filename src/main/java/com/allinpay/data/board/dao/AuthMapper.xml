@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.allinpay.data.board.dao.AuthMapper">
+    <select id="findByUsername" resultType="com.allinpay.data.board.model.UserDetail">
+        SELECT user_id, user_name, password from sys_user where user_name = #{name};
+    </select>
+
+    <insert id="insert" parameterType="com.allinpay.data.board.model.UserDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_user (name, password) VALUES (#{username}, #{password});
+    </insert>
+
+    <insert id="insertRole">
+        insert into sys_user_role (user_id, role_id) VALUES (#{userId}, #{roleId});
+    </insert>
+
+    <select id="findRoleById" resultType="com.allinpay.data.board.model.Role">
+      select role_id, role_key, role_name from sys_role where role_id = #{roleId}
+    </select>
+
+    <select id="findRoleByUserId" resultType="com.allinpay.data.board.model.Role">
+        select role_id,role_key,role_name from sys_role where role_id in (SELECT role_id from sys_user_role where user_id = #{userId});
+    </select>
+</mapper>
